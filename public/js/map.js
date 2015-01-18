@@ -23,7 +23,7 @@ function initialize() {
       var currentLocationImage = "img/currentLocation.png"
 
       currentLocationMarker = new google.maps.Marker({
-        map:map, 
+        map: map, 
         position: pos,
         icon: currentLocationImage
       })
@@ -32,10 +32,9 @@ function initialize() {
 
       var request = {
         location: pos,
-        radius: 5000
+        radius: 500
       };
 
-      infowindow = new google.maps.InfoWindow();
       var service = new google.maps.places.PlacesService(map);
       service.nearbySearch(request, callback);
 
@@ -67,21 +66,21 @@ function handleNoGeolocation(errorFlag) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-// function moveMarker(marker){
-//   if(navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(function(position) {
-//       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-//       currentLocationMarker.setPosition(pos)
-//     }, function() {
-//       handleNoGeolocation(true);
-//     });
-//   } else {
-//     handleNoGeolocation(false);
-//   }
-//   setTimeout(moveMarker, 1000);
-// };
+function moveMarker(marker){
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      currentLocationMarker.setPosition(pos)
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    handleNoGeolocation(false);
+  }
+  setTimeout(moveMarker, 1000);
+};
 
-// google.maps.event.addDomListener(window, 'load', moveMarker)
+google.maps.event.addDomListener(window, 'load', moveMarker)
 
 function callback(results, status) {
   console.log(results)
@@ -96,10 +95,11 @@ function createMarker(place) {
   var placeLoc = place.geometry.location;
   var marker = new google.maps.Marker({
     map: map,
-    position: place.geometry.location
+    position: placeLoc
   });
 
   google.maps.event.addListener(marker, 'click', function() {
+    infowindow = new google.maps.InfoWindow();
     infowindow.setContent(place.name);
     infowindow.open(map, this);
   });
