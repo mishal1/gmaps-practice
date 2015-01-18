@@ -1,4 +1,5 @@
 var map;
+var currentLocationMarker;
 
 function initialize() {
   var mapOptions = {
@@ -20,7 +21,7 @@ function initialize() {
 
       var currentLocationImage = "img/currentLocation.png"
 
-      var marker = new google.maps.Marker({
+      currentLocationMarker = new google.maps.Marker({
         map:map, 
         position: pos,
         icon: currentLocationImage
@@ -30,6 +31,7 @@ function initialize() {
     }, function() {
       handleNoGeolocation(true);
     });
+
   } else {
     handleNoGeolocation(false);
   }
@@ -53,5 +55,32 @@ function handleNoGeolocation(errorFlag) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+function moveMarker(marker){
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      currentLocationMarker.setPosition(pos)
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    handleNoGeolocation(false);
+  }
+    setTimeout(function(){
+       if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(51.538933, -0.177112);
+      currentLocationMarker.setPosition(pos)
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    handleNoGeolocation(false);
+  }
+    }, 10000);
+};
+
+google.maps.event.addDomListener(window, 'load', moveMarker)
 
 
