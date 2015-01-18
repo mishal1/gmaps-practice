@@ -1,5 +1,6 @@
 var map;
 var currentLocationMarker;
+var infowindow;
 
 function initialize() {
   var mapOptions = {
@@ -28,6 +29,16 @@ function initialize() {
       })
 
       map.setCenter(pos);
+
+      var request = {
+        location: pos,
+        radius: 5000
+      };
+
+      infowindow = new google.maps.InfoWindow();
+      var service = new google.maps.places.PlacesService(map);
+      service.nearbySearch(request, callback);
+
     }, function() {
       handleNoGeolocation(true);
     });
@@ -56,31 +67,42 @@ function handleNoGeolocation(errorFlag) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-function moveMarker(marker){
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      currentLocationMarker.setPosition(pos)
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    handleNoGeolocation(false);
-  }
-    setTimeout(function(){
-       if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(51.538933, -0.177112);
-      currentLocationMarker.setPosition(pos)
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    handleNoGeolocation(false);
-  }
-    }, 10000);
-};
+// function moveMarker(marker){
+//   if(navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function(position) {
+//       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//       currentLocationMarker.setPosition(pos)
+//     }, function() {
+//       handleNoGeolocation(true);
+//     });
+//   } else {
+//     handleNoGeolocation(false);
+//   }
+//   setTimeout(moveMarker, 1000);
+// };
 
-google.maps.event.addDomListener(window, 'load', moveMarker)
+// google.maps.event.addDomListener(window, 'load', moveMarker)
+
+function callback(results, status) {
+  console.log(results)
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}
 
 
