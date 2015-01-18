@@ -18,11 +18,12 @@ function initialize() {
         content: 'You are here!'
       });
 
-      var currentLocationImage = "http://i.stack.imgur.com/Kbx0I.png"
+      var currentLocationImage = "img/currentLocation.png"
 
       var marker = new google.maps.Marker({
         map:map, 
-        position: pos
+        position: pos,
+        icon: currentLocationImage
       })
 
       map.setCenter(pos);
