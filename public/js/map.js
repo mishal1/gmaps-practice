@@ -18,6 +18,13 @@ function initialize() {
         content: 'You are here!'
       });
 
+      var currentLocationImage = "http://i.stack.imgur.com/Kbx0I.png"
+
+      var marker = new google.maps.Marker({
+        map:map, 
+        position: pos
+      })
+
       map.setCenter(pos);
     }, function() {
       handleNoGeolocation(true);
