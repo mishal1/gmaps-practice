@@ -12,24 +12,36 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 
 var fs = require ('fs')
 
+
 var twitterMarker = function(callback) {
-  fs.readFile('./tweets.txt', 'utf8', function(err, data){
-    if(err)
-      callback(err)
-    var array = new Array();
+  var array = new Array();
+  var stream = fs.createReadStream('./tweets.txt', {flags: 'r', encoding: 'utf-8'});
+  var buf = '';
 
-    var lines = data.split('\n')
-    var filelength = lines.length
-    lines.forEach(function(tweet, index, array){
-      array.push(tweet)
-        if (index === filelength - 1) {
-          callback(null, JSON.parse(array))
-        }
-    })
-
-    // console.log(data)
+  stream.on('data', function(d) {
+      buf += d.toString(); // when data is read, stash it in a string buffer
+      pump(); // then process the buffer
+  }).on('end', function(){
+    callback(null, array) 
   })
+
+  function pump() {
+      var pos;
+      while ((pos = buf.indexOf('\n')) >= 0) { // keep going while there's a newline somewhere in the buffer
+          process(buf.slice(0,pos)); // hand off the line
+          buf = buf.slice(pos+1); // and slice the processed data off the buffer
+      }
+  }
+
+  function process(line) { // here's where we do something with a line
+      if (line.length > 0) { // ignore empty lines
+          var obj = JSON.parse(line); // parse the JSON
+          array.push(obj);
+      }
+
+  }
 }
+
 
 app.get('/', function(request, response){
   response.render('index.ejs')
@@ -43,7 +55,7 @@ app.get('/markers', function(request, response){
   });
 });
 
-var port = process.env.PORT || 3000
+var port = 3000
 
 server.listen(port, function(){
   console.log("Listening on port " + port)
