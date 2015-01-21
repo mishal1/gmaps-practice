@@ -14,16 +14,16 @@ var fs = require ('fs')
 
 
 var twitterMarker = function(callback) {
-var array = new Array();
-var stream = fs.createReadStream('./tweetslasthalf.txt', {flags: 'r', encoding: 'utf-8'});
-var buf = '';
-var count = 0
+  var array = new Array();
+  var stream = fs.createReadStream('./largetweets.txt', {flags: 'r', encoding: 'utf-8'});
+  var buf = '';
 
   stream.on('data', function(d) {
     buf += d.toString(); // when data is read, stash it in a string buffer
     pump(); // then process the buffer
   }).on('end', function(){
     callback(null, array) 
+    console.log(array.length)
   })
 
   function pump() {
@@ -36,14 +36,22 @@ var count = 0
 
   function process(line) { // here's where we do something with a line
     if (line.length > 0) { // ignore empty lines
-      try {
-        var obj = JSON.parse(line); // parse the JSON
-      } catch (err) {
-        continue;
-      }
-      if(obj.geo != null && latIsFine(obj.geo.coordinates[0]) && longIsFine(obj.geo.coordinates[1])) {
-        array.push(obj.geo.coordinates);
-      }
+     // parse the JSON
+     isJson(line)
+    }
+  }
+
+  function isJson(str) {
+    try {
+      var obj = JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    if (obj.geo != null){
+      array.push(obj.geo.coordinates);
+      return true;
+    } else{
+      return true;
     }
   }
 
