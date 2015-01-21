@@ -53,7 +53,7 @@ function initialize() {
     var array = []
     // console.log(data)
     data.forEach(function(tweet){
-      createMarker(tweet);
+     // createMarker(tweet);
       array.push(new google.maps.LatLng(tweet[0],
                                    tweet[1]))
     });
