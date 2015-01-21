@@ -4,7 +4,7 @@ var infowindow;
 
 function initialize() {
   var mapOptions = {
-    zoom: 6
+    zoom: 10
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
@@ -48,11 +48,25 @@ function initialize() {
     handleNoGeolocation(false);
   }
 }
+  var heatmap
 
   $.get( "/markers", function( data ) {
+    var array = []
+    // console.log(data)
     data.forEach(function(tweet){
-      createMarker(tweet); 
+      // createMarker(tweet);
+      array.push(new google.maps.LatLng(tweet[0],
+                                   tweet[1]))
     });
+    var pointArray = new google.maps.MVCArray(array);
+    console.log(pointArray)
+    heatmap = new google.maps.visualization.HeatmapLayer({
+      data: pointArray
+    });
+    heatmap.set('radius', 20);
+    heatmap.set('opacity', 1);
+    // heatmap.set('dissipating', true);
+    heatmap.setMap(map);
   });
 
  function createMarker(place) {

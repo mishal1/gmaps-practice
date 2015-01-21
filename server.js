@@ -52,7 +52,7 @@ app.get('/markers', function(request, response){
   twitterMarker(function(err, markers){
     if(err)
       response.send(err)
-    response.json(markers.length)
+    response.json(markers)
   });
 });
 
