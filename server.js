@@ -36,7 +36,8 @@ var twitterMarker = function(callback) {
   function process(line) { // here's where we do something with a line
       if (line.length > 0) { // ignore empty lines
           var obj = JSON.parse(line); // parse the JSON
-          array.push(obj);
+          if (obj.geo != null)
+            array.push(obj.geo.coordinates);
       }
 
   }
@@ -51,7 +52,7 @@ app.get('/markers', function(request, response){
   twitterMarker(function(err, markers){
     if(err)
       response.send(err)
-    response.json(markers)
+    response.json(markers.length)
   });
 });
 
