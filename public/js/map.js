@@ -13,7 +13,6 @@ function initialize() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
-      console.log(pos);
       var infowindow = new google.maps.InfoWindow({
         map: map,
         position: pos,
@@ -54,12 +53,11 @@ function initialize() {
     var array = []
     // console.log(data)
     data.forEach(function(tweet){
-      // createMarker(tweet);
+      createMarker(tweet);
       array.push(new google.maps.LatLng(tweet[0],
                                    tweet[1]))
     });
     var pointArray = new google.maps.MVCArray(array);
-    console.log(pointArray)
     heatmap = new google.maps.visualization.HeatmapLayer({
       data: pointArray
     });

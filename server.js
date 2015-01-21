@@ -36,10 +36,18 @@ var twitterMarker = function(callback) {
   function process(line) { // here's where we do something with a line
       if (line.length > 0) { // ignore empty lines
           var obj = JSON.parse(line); // parse the JSON
-          if (obj.geo != null)
+          if (obj.geo != null && latIsFine(obj.geo.coordinates[0]) && longIsFine(obj.geo.coordinates[1]))
+          // console.log(latIsFine(obj.geo.coordinates[0]))
             array.push(obj.geo.coordinates);
       }
+  }
 
+  function latIsFine (latitude){
+    return latitude >= 51.51493 && latitude <= 51.53197
+  }
+
+  function longIsFine(longitude){
+    return longitude >= -0.09754 && longitude <= -0.05725
   }
 }
 
