@@ -15,7 +15,7 @@ var fs = require ('fs')
 
 var twitterMarker = function(callback) {
   var array = new Array();
-  var stream = fs.createReadStream('./tweets.txt', {flags: 'r', encoding: 'utf-8'});
+  var stream = fs.createReadStream('./largetweets.txt', {flags: 'r', encoding: 'utf-8'});
   var buf = '';
 
   stream.on('data', function(d) {
@@ -23,6 +23,7 @@ var twitterMarker = function(callback) {
       pump(); // then process the buffer
   }).on('end', function(){
     callback(null, array) 
+    console.log(array.length)
   })
 
   function pump() {
@@ -34,12 +35,24 @@ var twitterMarker = function(callback) {
   }
 
   function process(line) { // here's where we do something with a line
-      if (line.length > 0) { // ignore empty lines
-          var obj = JSON.parse(line); // parse the JSON
-          if (obj.geo != null && latIsFine(obj.geo.coordinates[0]) && longIsFine(obj.geo.coordinates[1]))
-          // console.log(latIsFine(obj.geo.coordinates[0]))
-            array.push(obj.geo.coordinates);
-      }
+    if (line.length > 0) { // ignore empty lines
+     // parse the JSON
+     isJson(line)
+    }
+  }
+
+  function isJson(str) {
+    try {
+      var obj = JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    if (obj.geo != null){
+      array.push(obj.geo.coordinates);
+      return true;
+    } else{
+      return true;
+    }
   }
 
   function latIsFine (latitude){
