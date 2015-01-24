@@ -29,16 +29,6 @@ function initialize() {
 
       map.setCenter(pos);
 
-
-
-      // var request = {
-      //   location: pos,
-      //   radius: 500
-      // };
-
-      // var service = new google.maps.places.PlacesService(map);
-      // service.nearbySearch(request, callback);
-
     }, function() {
       handleNoGeolocation(true);
     });
@@ -53,7 +43,7 @@ function initialize() {
     var array = []
     // console.log(data)
     data.forEach(function(tweet){
-     // createMarker(tweet);
+     createMarker(tweet);
       array.push(new google.maps.LatLng(tweet[0],
                                    tweet[1]))
     });
@@ -63,7 +53,6 @@ function initialize() {
     });
     heatmap.set('radius', 20);
     heatmap.set('opacity', 1);
-    // heatmap.set('dissipating', true);
     heatmap.setMap(map);
   });
 
