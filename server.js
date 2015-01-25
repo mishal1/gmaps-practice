@@ -15,7 +15,7 @@ var fs = require ('fs')
 
 var twitterMarker = function(callback) {
   var array = new Array();
-  var stream = fs.createReadStream('./largetweets.txt', {flags: 'r', encoding: 'utf-8'});
+  var stream = fs.createReadStream('./tweetslarge.txt', {flags: 'r', encoding: 'utf-8'});
   var buf = '';
 
   stream.on('data', function(d) {
@@ -47,7 +47,7 @@ var twitterMarker = function(callback) {
     } catch (e) {
       return false;
     }
-    if (obj.geo != null){
+    if (obj.geo != null && latIsFine(obj.geo.coordinates[0]) && longIsFine(obj.geo.coordinates[1])){
       array.push(obj.geo.coordinates);
       return true;
     } else{
@@ -56,11 +56,11 @@ var twitterMarker = function(callback) {
   }
 
   function latIsFine (latitude){
-    return latitude >= 51.51493 && latitude <= 51.53197
+    return latitude >= 51.514492 && latitude <= 51.520853
   }
 
   function longIsFine(longitude){
-    return longitude >= -0.09754 && longitude <= -0.05725
+    return longitude >= -0.080306 && longitude <= -0.06515
   }
 }
 
