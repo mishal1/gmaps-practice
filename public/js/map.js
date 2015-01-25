@@ -1,6 +1,7 @@
 var map;
 var currentLocationMarker;
 var infowindow;
+var cluster =[];
 
 function initialize() {
   var mapOptions = {
@@ -39,7 +40,7 @@ function initialize() {
 }
   var heatmap
 
-  $.get( "/markers", function( data ) {
+  $.get( "/markers", function(data) {
     var array = []
     // console.log(data)
     data.forEach(function(tweet){
@@ -47,6 +48,7 @@ function initialize() {
       array.push(new google.maps.LatLng(tweet[0],
                                    tweet[1]))
     });
+    var markerCluster = new MarkerClusterer(map, cluster);
     var pointArray = new google.maps.MVCArray(array);
     heatmap = new google.maps.visualization.HeatmapLayer({
       data: pointArray
@@ -63,6 +65,7 @@ function initialize() {
      map: map,
      position: mposition
    });
+   cluster.push(marker)
  };
 
 function handleNoGeolocation(errorFlag) {

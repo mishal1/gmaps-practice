@@ -10,6 +10,19 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&libraries=visualization"></script>
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    <script type="text/javascript">
+      var script = '<script type="text/javascript" src="/js/markerCluster';
+      if (document.location.search.indexOf('packed') !== -1) {
+        script += '_packed';
+      }
+      if (document.location.search.indexOf('compiled') !== -1) {
+        script += '_compiled';
+      }
+      script += '.js"><' + '/script>';
+      document.write(script);
+    </script>
+
     <script type="text/javascript" src="/js/map.js"></script>
   </body>
 </html>
