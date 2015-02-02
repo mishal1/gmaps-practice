@@ -1,5 +1,7 @@
 #Google Maps Test Project
 
+[![Code Climate](https://codeclimate.com/github/nickbdyer/gmaps-practice/badges/gpa.svg)](https://codeclimate.com/github/nickbdyer/gmaps-practice)
+
 This repo was used as a basis for making some sturcutred pivots on our final
 project idea. 
 
