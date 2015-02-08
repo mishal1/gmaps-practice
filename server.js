@@ -15,7 +15,7 @@ var fs = require ('fs')
 
 var twitterMarker = function(callback) {
   var array = new Array();
-  var stream = fs.createReadStream('./largetweets.txt', {flags: 'r', encoding: 'utf-8'});
+  var stream = fs.createReadStream('./tweetslarge.txt', {flags: 'r', encoding: 'utf-8'});
   var buf = '';
 
   stream.on('data', function(d) {
@@ -55,7 +55,7 @@ var twitterMarker = function(callback) {
     }
   }
 
-   function latIsFine (latitude){
+  function latIsFine (latitude){
     return latitude >= 51.514492 && latitude <= 51.520853
   }
 
